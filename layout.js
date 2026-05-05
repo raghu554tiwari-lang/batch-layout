@@ -554,6 +554,33 @@ function replaceLogo(){
   });
 }
 
+function replaceLogo(){
+  document.querySelectorAll('img').forEach(function(img){
+
+    if(img.dataset.logoReplaced) return;
+
+    var rect = img.getBoundingClientRect();
+
+    // 🎯 sirf top-left corner ka logo
+    if(
+      rect.top < 120 &&      // top area
+      rect.left < 80 &&      // left side (IMPORTANT)
+      rect.width > 20 && rect.width < 120 &&
+      rect.height > 20 && rect.height < 120
+    ){
+      img.dataset.logoReplaced = '1';
+      img.src = NEW_LOGO;
+
+      img.style.cssText =
+        'width:42px!important;height:42px!important;' +
+        'object-fit:cover!important;object-position:center!important;' +
+        'border-radius:50%!important;' +
+        'display:block!important;margin:0!important;padding:0!important;';
+    }
+
+  });
+}
+
 /* ============ HAMBURGER MENU ============ */
 function editHamburgerMenu(){
   document.querySelectorAll('a, li, div').forEach(function(el){

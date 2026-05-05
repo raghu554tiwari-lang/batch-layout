@@ -530,37 +530,34 @@ function replaceAllText(){ if(document.body) replaceTextInNode(document.body); }
 /* ============ LOGO REPLACE ============ */
 function replaceLogo(){
 
-  // 🎯 sidebar / hamburger detect
-  var sidebar = document.querySelector(
-    '[class*="drawer"], [class*="sidebar"], [class*="menu"], [role="dialog"]'
-  );
+  // sidebar detect (drawer open hone par hi milega)
+  var sidebar = document.querySelector('[class*="drawer"], [role="dialog"]');
   if(!sidebar) return;
 
-  // 🎯 top header area
-  var header = sidebar.querySelector('div');
-  if(!header) return;
+  // 🎯 sirf top header area ka image target karo
+  var imgs = sidebar.querySelectorAll('img');
 
-  var img = header.querySelector('img');
-  if(!img || img.dataset.logoReplaced) return;
+  imgs.forEach(function(img){
 
-  img.dataset.logoReplaced = '1';
-  img.src = NEW_LOGO;
+    if(img.dataset.logoReplaced) return;
 
-  // 🔥 PERFECT CIRCLE FIT
-  img.style.width = "42px";
-  img.style.height = "42px";
-  img.style.minWidth = "42px";
-  img.style.minHeight = "42px";
+    var rect = img.getBoundingClientRect();
 
-  img.style.objectFit = "cover";
-  img.style.objectPosition = "center";
+    // 🎯 sirf top-left logo (position based)
+    if(rect.top < 120 && rect.left < 120){
 
-  img.style.borderRadius = "50%";   // perfect circle
-  img.style.padding = "0";
-  img.style.margin = "0";
+      img.dataset.logoReplaced = '1';
+      img.src = NEW_LOGO;
 
-  img.style.background = "#fff";    // optional clean bg
-  img.style.display = "block";
+      img.style.width = "42px";
+      img.style.height = "42px";
+      img.style.objectFit = "cover";
+      img.style.objectPosition = "center";
+      img.style.borderRadius = "50%";
+      img.style.background = "#fff";
+    }
+
+  });
 }
 
 /* ============ HAMBURGER MENU ============ */

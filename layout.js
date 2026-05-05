@@ -528,45 +528,24 @@ function replaceTextInNode(node){
 function replaceAllText(){ if(document.body) replaceTextInNode(document.body); }
 
 /* ============ LOGO REPLACE ============ */
+/* ============ LOGO REPLACE ============ */
 function replaceLogo(){
-
-  // sidebar detect (drawer open hone par hi milega)
-  var sidebar = document.querySelector('[class*="drawer"], [role="dialog"]');
-  if(!sidebar) return;
-
-  // 🎯 sirf top header area ka image target karo
-  var imgs = sidebar.querySelectorAll('img');
-
-  imgs.forEach(function(img){
-
+  document.querySelectorAll('img').forEach(function(img){
     if(img.dataset.logoReplaced) return;
-
     var rect = img.getBoundingClientRect();
-
-    // 🎯 sirf top-left logo (position based)
-    if(rect.top < 120 && rect.left < 120){
-
+    if(
+      rect.top < 150 &&
+      rect.left < 100 &&
+      rect.width > 10 && rect.width < 150 &&
+      rect.height > 10 && rect.height < 100
+    ){
       img.dataset.logoReplaced = '1';
       img.src = NEW_LOGO;
-
-      img.style.width = "42px";
-      img.style.height = "42px";
-      img.style.objectFit = "cover";
-      img.style.objectPosition = "center";
-      img.style.borderRadius = "50%";
-      img.style.background = "#fff";
-    }
-
-  });
-}
-
-/* ============ HAMBURGER MENU ============ */
-function editHamburgerMenu(){
-  document.querySelectorAll('a, li, div').forEach(function(el){
-    if(!el.offsetParent) return;
-    var text=el.textContent.trim();
-    if(text==='Join Telegram'||text==='Donate Batch'||text==='Contact Us'){
-      el.style.setProperty('display','none','important');
+      img.style.cssText =
+        'width:100%!important;height:100%!important;' +
+        'object-fit:cover!important;object-position:center!important;' +
+        'opacity:1!important;border-radius:50%!important;' +
+        'display:block!important;padding:0!important;margin:0!important;';
     }
   });
 }

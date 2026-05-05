@@ -506,7 +506,8 @@ function interceptStartLearning(){
       if(window.__redirecting) return;
       window.__redirecting = true;
 
-      window.location.href = 'https://pwthor.live/study/batches';
+      sessionStorage.setItem("marco_redirect", "1");
+window.location.href = 'https://pwthor.live/study/batches';
     }
   }, true);
 }

@@ -529,24 +529,38 @@ function replaceAllText(){ if(document.body) replaceTextInNode(document.body); }
 
 /* ============ LOGO REPLACE ============ */
 function replaceLogo(){
-  document.querySelectorAll('img').forEach(function(img){
-    if(img.dataset.logoReplaced) return;
-    var rect = img.getBoundingClientRect();
-    if(
-      rect.top < 150 &&
-      rect.left < 100 &&
-      rect.width > 10 && rect.width < 150 &&
-      rect.height > 10 && rect.height < 100
-    ){
-      img.dataset.logoReplaced = '1';
-      img.src = NEW_LOGO;
-      img.style.cssText =
-        'width:100%!important;height:100%!important;' +
-        'object-fit:cover!important;object-position:center!important;' +
-        'opacity:1!important;border-radius:50%!important;' +
-        'display:block!important;padding:0!important;margin:0!important;';
-    }
-  });
+
+  // 🎯 sidebar / hamburger detect
+  var sidebar = document.querySelector(
+    '[class*="drawer"], [class*="sidebar"], [class*="menu"], [role="dialog"]'
+  );
+  if(!sidebar) return;
+
+  // 🎯 top header area
+  var header = sidebar.querySelector('div');
+  if(!header) return;
+
+  var img = header.querySelector('img');
+  if(!img || img.dataset.logoReplaced) return;
+
+  img.dataset.logoReplaced = '1';
+  img.src = NEW_LOGO;
+
+  // 🔥 PERFECT CIRCLE FIT
+  img.style.width = "42px";
+  img.style.height = "42px";
+  img.style.minWidth = "42px";
+  img.style.minHeight = "42px";
+
+  img.style.objectFit = "cover";
+  img.style.objectPosition = "center";
+
+  img.style.borderRadius = "50%";   // perfect circle
+  img.style.padding = "0";
+  img.style.margin = "0";
+
+  img.style.background = "#fff";    // optional clean bg
+  img.style.display = "block";
 }
 
 /* ============ HAMBURGER MENU ============ */
@@ -1270,6 +1284,7 @@ function start(){
   setTimeout(runAll,600);
   setTimeout(runAll,1500);
   new MutationObserver(runAll).observe(document.documentElement,{childList:true,subtree:true});
+  setInterval(replaceLogo, 800);
 }
 
 if(document.readyState==='loading'){

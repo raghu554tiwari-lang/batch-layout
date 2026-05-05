@@ -528,7 +528,6 @@ function replaceTextInNode(node){
 function replaceAllText(){ if(document.body) replaceTextInNode(document.body); }
 
 /* ============ LOGO REPLACE ============ */
-/* ============ LOGO REPLACE ============ */
 function replaceLogo(){
   document.querySelectorAll('img').forEach(function(img){
     if(img.dataset.logoReplaced) return;

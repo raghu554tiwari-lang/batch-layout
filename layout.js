@@ -488,22 +488,25 @@ function showLoadingScreen(targetUrl, duration){
   }, duration);
 }
 
+
 /* ============================================================
    START LEARNING BUTTON INTERCEPTOR
    ============================================================ */
 function interceptStartLearning(){
   document.addEventListener('click', function(e){
-    var el = e.target;
-    for(var i = 0; i < 8; i++){
-      if(!el || el === document.body) break;
-      var txt = (el.textContent || '').trim().toLowerCase();
-      if(txt.includes('start learning')){
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        showLoadingScreen('https://pwthor.live/study/batches', 7000);
-        return;
-      }
-      el = el.parentElement;
+    var btn = e.target.closest('button, a, div');
+    if(!btn) return;
+
+    var txt = (btn.innerText || '').trim();
+
+    if(txt.includes('Start Learning')){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      if(window.__redirecting) return;
+      window.__redirecting = true;
+
+      window.location.href = 'https://pwthor.live/study/batches';
     }
   }, true);
 }
@@ -527,31 +530,19 @@ function replaceAllText(){ if(document.body) replaceTextInNode(document.body); }
 function replaceLogo(){
   document.querySelectorAll('img').forEach(function(img){
     if(img.dataset.logoReplaced) return;
-    var rect=img.getBoundingClientRect();
-    if(rect.top<150 && rect.width<150 && rect.height<100 && rect.width>10){
-      if(img.naturalWidth>0 && img.naturalWidth>300) return;
-      if(img.naturalHeight>0 && img.naturalHeight>300) return;
-      var parent=img.parentElement;
-      var isInHamburger=false;
-      for(var i=0;i<8;i++){
-        if(!parent) break;
-        var cls=(parent.className||'').toString().toLowerCase();
-        var role=(parent.getAttribute('role')||'').toLowerCase();
-        if(cls.includes('drawer')||cls.includes('sidebar')||cls.includes('menu')||
-           cls.includes('nav')||cls.includes('header')||cls.includes('navbar')||
-           cls.includes('hamburger')||cls.includes('toolbar')||
-           role==='navigation'||role==='banner'){
-          isInHamburger=true; break;
-        }
-        parent=parent.parentElement;
-      }
-      if(!isInHamburger && rect.left > 100) return;
-      img.dataset.logoReplaced='1';
-      img.src=NEW_LOGO;
-      img.style.cssText=
-        'width:100%!important;height:100%!important;'+
-        'object-fit:cover!important;object-position:center!important;'+
-        'opacity:1!important;border-radius:50%!important;'+
+    var rect = img.getBoundingClientRect();
+    if(
+      rect.top < 150 &&
+      rect.left < 100 &&
+      rect.width > 10 && rect.width < 150 &&
+      rect.height > 10 && rect.height < 100
+    ){
+      img.dataset.logoReplaced = '1';
+      img.src = NEW_LOGO;
+      img.style.cssText =
+        'width:100%!important;height:100%!important;' +
+        'object-fit:cover!important;object-position:center!important;' +
+        'opacity:1!important;border-radius:50%!important;' +
         'display:block!important;padding:0!important;margin:0!important;';
     }
   });
